@@ -62,7 +62,7 @@ const CreateService = () => {
   };
   const serviceMutation = useMutation(
     async (newData) =>
-      await axios.post(`http://simple.hulum.et/api/services`, newData, {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}services`, newData, {
         headers,
       }),
     {
@@ -73,7 +73,7 @@ const CreateService = () => {
   const editServiceMutation = useMutation(
     async (newData) =>
       await axios.patch(
-        `http://simple.hulum.et/api/services/${editServiceId}`,
+        `${process.env.REACT_APP_BACKEND_URL}services/${editServiceId}`,
         newData,
         {
           headers,

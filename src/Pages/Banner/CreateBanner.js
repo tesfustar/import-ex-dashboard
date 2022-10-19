@@ -61,7 +61,7 @@ const CreateBanner = () => {
   };
   const bannerMutation = useMutation(
     async (newData) =>
-      await axios.post(`http://simple.hulum.et/api/coursols`, newData, {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}coursols`, newData, {
         headers,
       }),
     {
@@ -72,7 +72,7 @@ const CreateBanner = () => {
   const editBannerMutation = useMutation(
     async (newData) =>
       await axios.patch(
-        `http://simple.hulum.et/api/coursols/${editBannerId}`,
+        `${process.env.REACT_APP_BACKEND_URL}coursols/${editBannerId}`,
         newData,
         {
           headers,
