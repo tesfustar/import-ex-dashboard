@@ -37,7 +37,7 @@ const Services = () => {
   const serviceDeleteMutation = useMutation(
     async (id) =>
       await axios.delete(
-        `http://simple.hulum.et/api/services/${id}`,{headers}
+        `${process.env.REACT_APP_BACKEND_URL}services/${id}`,{headers}
       ),
     {
       retry: false,
@@ -85,7 +85,7 @@ const Services = () => {
   const servicesData = useQuery(
     ["servicesDataApi",serviceId,editServiceId],
     async () =>
-      await axios.get(`http://simple.hulum.et/api/services`, {
+      await axios.get(`${process.env.REACT_APP_BACKEND_URL}services`, {
         headers,
       }),
     {

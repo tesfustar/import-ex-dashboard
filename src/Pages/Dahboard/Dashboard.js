@@ -16,7 +16,7 @@ const Dashboard = () => {
   const dashboardData = useQuery(
     ["dashboardDataApi"],
     async () =>
-      await axios.get(`http://simple.hulum.et/api/count`, {
+      await axios.get(`${process.env.REACT_APP_BACKEND_URL}count`, {
         headers,
       }),
     {

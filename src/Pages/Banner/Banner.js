@@ -37,7 +37,7 @@ const Banner = () => {
   const serviceBannerMutation = useMutation(
     async (id) =>
       await axios.delete(
-        `http://simple.hulum.et/api/coursols/${id}`,{headers}
+        `${process.env.REACT_APP_BACKEND_URL}coursols/${id}`,{headers}
       ),
     {
       retry: false,
@@ -86,7 +86,7 @@ const Banner = () => {
   const bannerData = useQuery(
     ["bannerDataApi",bannerId,editBannerId],
     async () =>
-      await axios.get(`http://simple.hulum.et/api/coursols`, {
+      await axios.get(`${process.env.REACT_APP_BACKEND_URL}coursols`, {
         headers,
       }),
     {
