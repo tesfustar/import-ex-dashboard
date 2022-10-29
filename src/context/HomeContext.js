@@ -11,6 +11,7 @@ export const HomeProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [editServiceId, setEditServiceId] = useState(null);
   const [editBannerId, setEditBannerId] = useState(null);
+  const [editBlogId, setEditBlogId] = useState(null);
   const handleNav = () => {
     setIsOpen(!isOpen);
   };
@@ -54,6 +55,8 @@ export const HomeProvider = ({ children }) => {
         setEditServiceId,
         editBannerId,
         setEditBannerId,
+        editBlogId,
+        setEditBlogId,
       }}
     >
       {children}

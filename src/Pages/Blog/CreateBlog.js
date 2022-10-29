@@ -7,12 +7,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
-const CreateService = () => {
-  const { editServiceId, setEditServiceId } = useHomeContext();
+const CreateBlog = () => {
+  const { editBlogId,setEditBlogId } = useHomeContext();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [file, setFile] = useState(null);
-  const [selected, setSelected] = useState(null)
   const navigate = useNavigate();
   const {token}  =useAuth()
   const headers = {
@@ -22,8 +21,8 @@ const CreateService = () => {
   };
 
   const handleClick = () => {
-    if (editServiceId) {
-      if(title === "" || body === "" || !file || !selected){
+    if (editBlogId) {
+      if(title === "" || body === "" || !file ){
         toast.info(
           "please fill the fields and upload image",
           { theme: "colored" },
@@ -42,7 +41,7 @@ const CreateService = () => {
       editServiceHandler(file);
       return;
     }
-    if(title === "" || body === "" || !file || !selected){
+    if(title === "" || body === "" || !file ){
       toast.info(
         "please fill the fields and upload image",
         { theme: "colored" },
@@ -58,11 +57,11 @@ const CreateService = () => {
       );
       return
     }
-    createServiceHandler(file);
+    createBlogHandler(file);
   };
-  const serviceMutation = useMutation(
+  const blogMutation = useMutation(
     async (newData) =>
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}services`, newData, {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}blogs`, newData, {
         headers,
       }),
     {
@@ -70,10 +69,10 @@ const CreateService = () => {
     }
   );
 
-  const editServiceMutation = useMutation(
+  const editBlogMutation = useMutation(
     async (newData) =>
       await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}services/${editServiceId}`,
+        `${process.env.REACT_APP_BACKEND_URL}blogs/${editBlogId}`,
         newData,
         {
           headers,
@@ -99,18 +98,18 @@ const CreateService = () => {
   //     }
   //   );
 
-  const createServiceHandler = async (values) => {
+  const createBlogHandler = async (values) => {
     console.log(values);
     try {
       let formData = new FormData();
       formData.append("title", title);
       formData.append("body", body);
-      formData.append("service_photo", values);
-      formData.append("type", selected);
-      serviceMutation.mutate(formData, {
+      formData.append("blog_photo", values);
+  
+      blogMutation.mutate(formData, {
         onSuccess: (responseData) => {
           toast.info(
-            "service created successfully",
+            "blog created successfully",
             { theme: "colored" },
             {
               position: "bottom-center",
@@ -123,7 +122,7 @@ const CreateService = () => {
             }
           );
           setTimeout(() => {
-            navigate("/services");
+            navigate("/blog");
           }, 1000);
         },
         onError: (err) => {
@@ -155,12 +154,11 @@ const CreateService = () => {
       formData.append("_method", "PATCH");
       formData.append("title", title);
       formData.append("body", body);
-      formData.append("service_photo", values);
-      formData.append("type", selected);
-      editServiceMutation.mutate(formData, {
+      formData.append("blog_photo", values);
+      editBlogMutation.mutate(formData, {
         onSuccess: (responseData) => {
           toast.info(
-            "service edited successfully",
+            "blog edited successfully",
             { theme: "colored" },
             {
               position: "bottom-center",
@@ -173,8 +171,8 @@ const CreateService = () => {
             }
           );
           setTimeout(() => {
-            navigate("/services");
-            setEditServiceId(null);
+            navigate("/blog");
+            setEditBlogId(null);
           }, 1000);
         },
         onError: (err) => {
@@ -202,13 +200,13 @@ const CreateService = () => {
       <div className="bg-white p-2 md:p-5 rounded-lg">
         <div className="flex items-center justify-between py-4 ">
           <h1 className="text-dark-color dark:text-white font-bold text-2xl">
-            {editServiceId ? "Edit Services" : "Create Services"}
+            {editBlogId ? "Edit Blog" : "Create Blog"}
           </h1>
         </div>
         {/* form */}
         <div className="pt-3 flex flex-col items-start space-y-2 w-full">
           <div className="flex flex-col items-start space-y-2 w-full">
-            <p className="font-medium text-dark-gray">Title</p>
+            <p className="font-medium text-dark-gray">Blog Title</p>
             <input
               type="text"
               name=""
@@ -220,7 +218,7 @@ const CreateService = () => {
             />
           </div>
           <div className="flex flex-col items-start space-y-2 w-full">
-            <p className="font-medium text-dark-gray">Body</p>
+            <p className="font-medium text-dark-gray">Blog Body</p>
             <textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
@@ -230,16 +228,9 @@ const CreateService = () => {
               className="p-2 w-full border-2 border-dark-gray text-dark-color focus:outline-none"
             ></textarea>
           </div>
+      
           <div className="flex flex-col items-start space-y-2 w-full">
-            <p className="font-medium text-dark-gray">Type</p>
-          <select name="" id=""  onChange={(e)=>setSelected(e.target.value)}
-          className="p-2 w-full border-2 border-dark-gray text-dark-color focus:outline-none">
-        <option value={1}>Import</option>
-        <option value={2}>Export</option>
-          </select>
-          </div>
-          <div className="flex flex-col items-start space-y-2 w-full">
-            <p className="font-medium text-dark-gray">Image</p>
+            <p className="font-medium text-dark-gray">Blog Image</p>
             <input
               type="file"
               name=""
@@ -250,17 +241,17 @@ const CreateService = () => {
           </div>
           <button
             disabled={
-              serviceMutation.isLoading || editServiceMutation.isLoading
+                blogMutation.isLoading || editBlogMutation.isLoading
             }
             onClick={handleClick}
             className="bg-blue-bg font-medium text-white p-2 px-10
            rounded-md"
           >
-            {editServiceId
-              ? editServiceMutation.isLoading
+            {editBlogId
+              ? editBlogMutation.isLoading
                 ? "Loading.."
                 : "Edit"
-              : serviceMutation.isLoading
+              : blogMutation.isLoading
               ? "Loading..."
               : "Create"}
           </button>
@@ -282,4 +273,4 @@ const CreateService = () => {
   );
 };
 
-export default CreateService;
+export default CreateBlog;

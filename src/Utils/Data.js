@@ -31,7 +31,11 @@ export const sideBarLinks=[
                 icon :<GiVerticalBanner size={18} className=' text-[#96a0af]'/>
             },
         
-          
+            {
+                name:'blog',
+                link:'blog',
+                icon :<GiVerticalBanner size={18} className=' text-[#96a0af]'/>
+            },
         ]
     },
   

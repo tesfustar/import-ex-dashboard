@@ -71,7 +71,7 @@ const CreateBanner = () => {
 
   const editBannerMutation = useMutation(
     async (newData) =>
-      await axios.patch(
+      await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}coursols/${editBannerId}`,
         newData,
         {
@@ -148,6 +148,7 @@ const CreateBanner = () => {
   const editBannerHandler = async (values) => {
     try {
       let formData = new FormData();
+      formData.append("_method", "PATCH");
       formData.append("title", title);
       formData.append("body", body);
       formData.append("coursol_photo", values);
