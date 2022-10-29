@@ -107,7 +107,6 @@ const Blog = () => {
           headerName: "Image",
           width: 100,
           renderCell: (params) => {
-            console.log(params?.row)
             return (
               <img
                 src={params?.row?.blog_photo}

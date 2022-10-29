@@ -119,6 +119,17 @@ const Services = () => {
       },
     },
     {
+      field: "type",
+      headerName: "type",
+      width: 100,
+      renderCell: (params) => {
+        console.log(params?.row)
+        return (
+         <h1>{params?.row?.type}</h1>
+        );
+      },
+    },
+    {
       field: "title",
       headerName: "title",
       width: 150,

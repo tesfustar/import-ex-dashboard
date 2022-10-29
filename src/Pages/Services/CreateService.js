@@ -12,9 +12,9 @@ const CreateService = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [file, setFile] = useState(null);
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState(1);
   const navigate = useNavigate();
-  const {token}  =useAuth()
+  const { token } = useAuth();
   const headers = {
     "Content-Type": "multipart/form-data",
     Accept: "multipart/form-data",
@@ -23,7 +23,7 @@ const CreateService = () => {
 
   const handleClick = () => {
     if (editServiceId) {
-      if(title === "" || body === "" || !file || !selected){
+      if (title === "" || body === "" || !file || !selected) {
         toast.info(
           "please fill the fields and upload image",
           { theme: "colored" },
@@ -37,12 +37,12 @@ const CreateService = () => {
             progress: undefined,
           }
         );
-        return
+        return;
       }
       editServiceHandler(file);
       return;
     }
-    if(title === "" || body === "" || !file || !selected){
+    if (title === "" || body === "" || !file || !selected) {
       toast.info(
         "please fill the fields and upload image",
         { theme: "colored" },
@@ -56,15 +56,19 @@ const CreateService = () => {
           progress: undefined,
         }
       );
-      return
+      return;
     }
     createServiceHandler(file);
   };
   const serviceMutation = useMutation(
     async (newData) =>
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}services`, newData, {
-        headers,
-      }),
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}services`,
+        newData,
+        {
+          headers,
+        }
+      ),
     {
       retry: false,
     }
@@ -232,11 +236,15 @@ const CreateService = () => {
           </div>
           <div className="flex flex-col items-start space-y-2 w-full">
             <p className="font-medium text-dark-gray">Type</p>
-          <select name="" id=""  onChange={(e)=>setSelected(e.target.value)}
-          className="p-2 w-full border-2 border-dark-gray text-dark-color focus:outline-none">
-        <option value={1}>Import</option>
-        <option value={2}>Export</option>
-          </select>
+            <select
+              name=""
+              id=""
+              onChange={(e) => setSelected(e.target.value)}
+              className="p-2 w-full border-2 border-dark-gray text-dark-color focus:outline-none"
+            >
+              <option value={1}>Import</option>
+              <option value={2}>Export</option>
+            </select>
           </div>
           <div className="flex flex-col items-start space-y-2 w-full">
             <p className="font-medium text-dark-gray">Image</p>
