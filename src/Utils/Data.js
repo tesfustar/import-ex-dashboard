@@ -21,6 +21,11 @@ export const sideBarLinks=[
         title:'Lists',
         links:[
             {
+                name:'service Category',
+                link:'category', 
+                icon :<MdOutlineDesignServices size={18} className=' text-[#96a0af]'/>
+            },
+            {
                 name:'services',
                 link:'services',
                 icon :<MdOutlineDesignServices size={18} className=' text-[#96a0af]'/>

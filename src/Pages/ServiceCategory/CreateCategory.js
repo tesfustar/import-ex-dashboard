@@ -7,8 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
-const CreateService = () => {
-  const { editServiceId, setEditServiceId } = useHomeContext();
+const CreateCategory = () => {
+  const { editServiceCategoryId, setEditServiceCategoryId } = useHomeContext();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [file, setFile] = useState(null);
@@ -22,7 +22,7 @@ const CreateService = () => {
   };
 
   const handleClick = () => {
-    if (editServiceId) {
+    if (editServiceCategoryId) {
       if (title === "" || body === "" || !file || !selected) {
         toast.info(
           "please fill the fields and upload image",
@@ -63,7 +63,7 @@ const CreateService = () => {
   const serviceMutation = useMutation(
     async (newData) =>
       await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}services`,
+        `${process.env.REACT_APP_BACKEND_URL}service-categories`,
         newData,
         {
           headers,
@@ -77,7 +77,7 @@ const CreateService = () => {
   const editServiceMutation = useMutation(
     async (newData) =>
       await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}services/${editServiceId}`,
+        `${process.env.REACT_APP_BACKEND_URL}service-categories/${editServiceCategoryId}`,
         newData,
         {
           headers,
@@ -88,36 +88,33 @@ const CreateService = () => {
     }
   );
 
-    const servicesData = useQuery(
-      ["servicesCategoryDataApi"],
-      async () =>
-        await axios.get(`${process.env.REACT_APP_BACKEND_URL}service-categories`, {
-          headers,
-        }),
-      {
-        keepPreviousData: true,
-        refetchOnWindowFocus: false,
-        retry: false,
-        enabled: !!token,
-        onSuccess: (res) => {
+  //   const servicesData = useQuery(
+  //     ["servicesDataApi",editServiceId],
+  //     async () =>
+  //       await axios.get(`http://simple.hulum.et/api/services/${editServiceId}`, {
+  //         headers,
+  //       }),
+  //     {
+  //       keepPreviousData: true,
+  //       refetchOnWindowFocus: false,
+  //       retry: false,
+  //       enabled: !!editServiceId,
+  //       onSuccess: (res) => {},
+  //     }
+  //   );
 
-        },
-      }
-    );
-
-    console.log(servicesData?.data?.data)
   const createServiceHandler = async (values) => {
     console.log(values);
     try {
       let formData = new FormData();
       formData.append("title", title);
       formData.append("body", body);
-      formData.append("service_photo", values);
-      formData.append("service_category_id", selected);
+      formData.append("service_category_photo", values);
+      formData.append("type", selected);
       serviceMutation.mutate(formData, {
         onSuccess: (responseData) => {
           toast.info(
-            "service created successfully",
+            "service category created successfully",
             { theme: "colored" },
             {
               position: "bottom-center",
@@ -130,7 +127,7 @@ const CreateService = () => {
             }
           );
           setTimeout(() => {
-            navigate("/services");
+            navigate("/category");
           }, 1000);
         },
         onError: (err) => {
@@ -162,12 +159,12 @@ const CreateService = () => {
       formData.append("_method", "PATCH");
       formData.append("title", title);
       formData.append("body", body);
-      formData.append("service_photo", values);
-      formData.append("service_category_id", selected);
+      formData.append("service_category_photo", values);
+      formData.append("type", selected);
       editServiceMutation.mutate(formData, {
         onSuccess: (responseData) => {
           toast.info(
-            "service edited successfully",
+            "service category edited successfully",
             { theme: "colored" },
             {
               position: "bottom-center",
@@ -180,8 +177,8 @@ const CreateService = () => {
             }
           );
           setTimeout(() => {
-            navigate("/services");
-            setEditServiceId(null);
+            navigate("/category");
+            setEditServiceCategoryId(null);
           }, 1000);
         },
         onError: (err) => {
@@ -209,7 +206,7 @@ const CreateService = () => {
       <div className="bg-white p-2 md:p-5 rounded-lg">
         <div className="flex items-center justify-between py-4 ">
           <h1 className="text-dark-color dark:text-white font-bold text-2xl">
-            {editServiceId ? "Edit Services" : "Create Services"}
+            {editServiceCategoryId ? "Edit Service Category" : "Create Service Category"}
           </h1>
         </div>
         {/* form */}
@@ -245,11 +242,8 @@ const CreateService = () => {
               onChange={(e) => setSelected(e.target.value)}
               className="p-2 w-full border-2 border-dark-gray text-dark-color focus:outline-none"
             >
-              <option >select category</option>
-              {servicesData?.data?.data?.map((item)=>(
-
-                <option value={item.id}>{item.title}</option>
-              ))}
+              <option value={1}>Import</option>
+              <option value={2}>Export</option>
             </select>
           </div>
           <div className="flex flex-col items-start space-y-2 w-full">
@@ -270,7 +264,7 @@ const CreateService = () => {
             className="bg-blue-bg font-medium text-white p-2 px-10
            rounded-md"
           >
-            {editServiceId
+            {editServiceCategoryId
               ? editServiceMutation.isLoading
                 ? "Loading.."
                 : "Edit"
@@ -296,4 +290,4 @@ const CreateService = () => {
   );
 };
 
-export default CreateService;
+export default CreateCategory;

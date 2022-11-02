@@ -9,7 +9,8 @@ import {
 } from "react-icons/bs";
 import { Sidebar, SmallSidebar, Navbar } from "./Components";
 import { useAuth } from "./context/auth";
-import { Banner, Services, Dashboard, CreateService,CreateBanner ,Login,Blog,CreateBlog} from "./Pages";
+import { Banner, Services, Dashboard, CreateService,CreateBanner ,
+  Login,Blog,CreateBlog,CreateCategory,Category} from "./Pages";
 import { AiTwotoneShop, AiFillSetting } from "react-icons/ai";
 const App = () => {
   const [readNotificationId, setReadNotificationId] = useState(null);
@@ -74,6 +75,8 @@ const App = () => {
                 <Route path="/banner/create" element={<CreateBanner />} />
                 <Route path="/blog" element={<Blog />}  />
                 <Route path="/blog/create" element={<CreateBlog />}  />
+                <Route path="/category" element={<Category />}  />
+                <Route path="/category/create" element={<CreateCategory />}  />
               </Routes>
             </div>
           </div>

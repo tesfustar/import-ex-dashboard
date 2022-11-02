@@ -12,6 +12,7 @@ export const HomeProvider = ({ children }) => {
   const [editServiceId, setEditServiceId] = useState(null);
   const [editBannerId, setEditBannerId] = useState(null);
   const [editBlogId, setEditBlogId] = useState(null);
+  const [editServiceCategoryId, setEditServiceCategoryId]  = useState(null);
   const handleNav = () => {
     setIsOpen(!isOpen);
   };
@@ -57,6 +58,7 @@ export const HomeProvider = ({ children }) => {
         setEditBannerId,
         editBlogId,
         setEditBlogId,
+        editServiceCategoryId, setEditServiceCategoryId
       }}
     >
       {children}

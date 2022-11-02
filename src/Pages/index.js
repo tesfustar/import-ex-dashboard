@@ -6,3 +6,6 @@ export { default as CreateBanner } from "./Banner/CreateBanner";
 export { default as Blog } from "./Blog/Blog";
 export { default as CreateBlog } from "./Blog/CreateBlog";
 export { default as Login } from "./Login";
+export { default as Category } from "./ServiceCategory/Category";
+
+export { default as CreateCategory } from "./ServiceCategory/CreateCategory";

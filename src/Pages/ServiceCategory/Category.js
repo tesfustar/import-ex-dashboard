@@ -17,11 +17,11 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useHomeContext } from "../../context/HomeContext";
 import { useAuth } from "../../context/auth";
-const Services = () => {
+const Category = () => {
   const {token}  =useAuth()
-  const {editServiceId, setEditServiceId} = useHomeContext()
+  const {editServiceCategoryId, setEditServiceCategoryId} = useHomeContext()
   const navigate = useNavigate()
-  const [services, setServices] = useState([]);
+  const [category, setCategory] = useState([])
   const [serviceId, setServiceId] = useState(null);
   const headers = {
     "Content-Type": "application/json",
@@ -37,7 +37,7 @@ const Services = () => {
   const serviceDeleteMutation = useMutation(
     async (id) =>
       await axios.delete(
-        `${process.env.REACT_APP_BACKEND_URL}services/${id}`,{headers}
+        `${process.env.REACT_APP_BACKEND_URL}service-categories/${id}`,{headers}
       ),
     {
       retry: false,
@@ -82,10 +82,10 @@ const Services = () => {
       console.log(err);
     }
   };
-  const servicesData = useQuery(
-    ["servicesDataApi",serviceId,editServiceId],
+  const servicesCategoryData = useQuery(
+    ["servicesCategoryDataApi",serviceId,editServiceCategoryId],
     async () =>
-      await axios.get(`${process.env.REACT_APP_BACKEND_URL}services`, {
+      await axios.get(`${process.env.REACT_APP_BACKEND_URL}service-categories`, {
         headers,
       }),
     {
@@ -93,14 +93,14 @@ const Services = () => {
       refetchOnWindowFocus: false,
       retry: false,
       // enabled: !!token,
-      onSuccess: (res) => {
-        setServices(
+      onSuccess: (res) => { console.log(res?.data)
+        setCategory(
           res?.data?.map((data, index) => ({ ...data, index: index + 1 }))
         );
       },
     }
   );
-  console.log({ services });
+  console.log({ category });
   const columns = [
     { field: "index", headerName: "ID", width: 90, headerAlign: "left" },
     {
@@ -111,24 +111,24 @@ const Services = () => {
         console.log(params?.row)
         return (
           <img
-            src={params?.row?.service_photo}
+            src={params?.row?.service_category_photo}
             alt=""
             className="h-12  w-full object-cover rounded-md"
           />
         );
       },
     },
-    // {
-    //   field: "type",
-    //   headerName: "type",
-    //   width: 100,
-    //   renderCell: (params) => {
-    //     console.log(params?.row)
-    //     return (
-    //      <h1>{params?.row?.type}</h1>
-    //     );
-    //   },
-    // },
+    {
+      field: "type",
+      headerName: "type",
+      width: 100,
+      renderCell: (params) => {
+        console.log(params?.row)
+        return (
+         <h1>{params?.row?.type}</h1>
+        );
+      },
+    },
     {
       field: "title",
       headerName: "title",
@@ -165,8 +165,8 @@ const Services = () => {
             >
               Delete
             </button>
-            <Link to={"/services/create/"}>
-              <button onClick={()=>setEditServiceId(params.row.id)}
+            <Link to={"/category/create/"}>
+              <button onClick={()=>setEditServiceCategoryId(params.row.id)}
                 className="bg-blue-bg rounded-sm text-center
                      px-5 p-1 font-medium text-sm text-white capitalize"
               >
@@ -199,17 +199,17 @@ const Services = () => {
       <div className="bg-white p-2 md:p-5 rounded-lg">
         <div className="flex items-center justify-between py-4 ">
           <h1 className="text-dark-color dark:text-white font-bold text-2xl">
-            Services
+            Service Category
           </h1>
-          <button onClick={()=>navigate('/services/create')} 
+          <button onClick={()=>navigate('/category/create')} 
           className="bg-blue-bg font-medium text-white p-2 px-5 rounded-md">Create</button>
         </div>
-      {servicesData.isFetched ? (
-          servicesData?.data?.data?.length > 0 ? (
-            services?.length > 0 ? (
+      {servicesCategoryData.isFetched ? (
+          servicesCategoryData?.data?.data?.length > 0 ? (
+            category?.length > 0 ? (
               <div style={{ height: 520 }} className="">
                 <DataGrid
-                  rows={services}
+                  rows={category}
                   columns={columns}
                   pageSize={7}
                   rowsPerPageOptions={[5]}
@@ -307,4 +307,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default Category;
