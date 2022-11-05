@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHomeContext } from "../../context/HomeContext";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
@@ -9,18 +9,40 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 const CreateService = () => {
   const { editServiceId, setEditServiceId } = useHomeContext();
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [file, setFile] = useState(null);
-  const [selected, setSelected] = useState(1);
-  const navigate = useNavigate();
   const { token } = useAuth();
   const headers = {
     "Content-Type": "multipart/form-data",
     Accept: "multipart/form-data",
     Authorization: `Bearer ${token}`,
   };
+  const singleServicesData = useQuery(
+    ["singleServicesDataApis",editServiceId],
+    async () =>
+      await axios.get(`${process.env.REACT_APP_BACKEND_URL}services/${editServiceId}`, {
+        headers,
+      }),
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      retry: false,
+      // enabled: !!token,
+      onSuccess: (res) => {},
+    }
+  );
+  const [title, setTitle] = useState(editServiceId ? singleServicesData?.data?.data?.title :"");
+  const [body, setBody] = useState( editServiceId ? singleServicesData?.data?.data?.body : "");
+  const [file, setFile] = useState(null);
+  const [selected, setSelected] = useState(1);
+  const navigate = useNavigate();
 
+useEffect(() => {
+ if(editServiceId){
+  setTitle(singleServicesData?.data?.data?.title)
+  setBody(singleServicesData?.data?.data?.body)
+ }
+}, [editServiceId,singleServicesData.isFetched])
+
+  
   const handleClick = () => {
     if (editServiceId) {
       if (title === "" || body === "" || !file || !selected) {
@@ -105,7 +127,6 @@ const CreateService = () => {
       }
     );
 
-    console.log(servicesData?.data?.data)
   const createServiceHandler = async (values) => {
     console.log(values);
     try {
@@ -204,6 +225,8 @@ const CreateService = () => {
       console.log(err);
     }
   };
+ 
+  console.log(singleServicesData?.data?.data)
   return (
     <div className="p-3 md:p-5 ">
       <div className="bg-white p-2 md:p-5 rounded-lg">
@@ -213,7 +236,7 @@ const CreateService = () => {
           </h1>
         </div>
         {/* form */}
-        <div className="pt-3 flex flex-col items-start space-y-2 w-full">
+        {singleServicesData.isFetched ? <div className="pt-3 flex flex-col items-start space-y-2 w-full">
           <div className="flex flex-col items-start space-y-2 w-full">
             <p className="font-medium text-dark-gray">Title</p>
             <input
@@ -278,7 +301,20 @@ const CreateService = () => {
               ? "Loading..."
               : "Create"}
           </button>
-        </div>
+        </div> :
+         <div className="flex items-center justify-center">
+         <ThreeDots
+           height="80"
+           width="80"
+           radius="9"
+           color="#216fed"
+           ariaLabel="three-dots-loading"
+           wrapperStyle={{}}
+           wrapperClassName=""
+           visible={true}
+         />
+       </div>
+        }
       </div>
       <ToastContainer
         position="bottom-center"

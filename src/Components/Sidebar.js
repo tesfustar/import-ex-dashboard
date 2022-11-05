@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import {sideBarLinks} from '../Utils/Data'
+import logo from '../assets/logo.png'
 import {
   TbPackgeImport
 } from "react-icons/tb";
@@ -8,7 +9,7 @@ import { BiLogOut } from "react-icons/bi";
 import { useAuth } from "../context/auth";
 import { useHomeContext } from "../context/HomeContext";
 const Sidebar = ({isOpen}) => {
-  const {setEditBannerId,setEditServiceId} = useHomeContext()
+  const {setEditBannerId,setEditServiceId,setEditServiceCategoryId,setEditBlogId} = useHomeContext()
   const {logout} =useAuth();
   const activeLink = `flex items-center  gap-3 ${
     isOpen ? "pl-2 " : "justify-center my-5"
@@ -21,10 +22,9 @@ const Sidebar = ({isOpen}) => {
     <div>
       <div className="">
         <div className={`flex items-center ${!isOpen && "justify-center"}  space-x-2 pb-3`}>
-          <TbPackgeImport size={40} className="text-main-color" />
-          {isOpen && <h1 className="font-bold text-3xl text-dark-color dark:text-white">
-            Import-Ex
-          </h1>}
+
+        
+          {isOpen &&   <img src={logo} className="" alt="" />}
         </div>
         <div className="flex flex-col">
           {sideBarLinks.map((item) => (
@@ -43,7 +43,9 @@ const Sidebar = ({isOpen}) => {
                   className={({ isActive }) =>
                     isActive ? activeLink : normalLink
                   }
-                  onClick={()=>{setEditServiceId(null);setEditBannerId(null)}}
+                  onClick={()=>{setEditServiceId(null);setEditBannerId(null);
+                    setEditBlogId(null);
+                    setEditServiceCategoryId(null)}}
                 >
                   {link.icon}
                   <span
@@ -59,7 +61,7 @@ const Sidebar = ({isOpen}) => {
           ))}
         </div>
         <div onClick={logout} 
-        className="flex items-center  w-full space-x-2 w-full p-2 text-dark-gray cursor-pointer">
+        className="flex items-center space-x-2 w-full p-2 text-dark-gray cursor-pointer">
           <BiLogOut className="text-xl"/>
           <p className="font-medium">Logout</p>
         </div>

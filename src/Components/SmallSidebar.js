@@ -12,6 +12,8 @@ const SmallSidebar = () => {
     screenSize,
     setEditBannerId,
     setEditServiceId,
+    setEditServiceCategoryId,
+    setEditBlogId
   } = useHomeContext();
 
   const handleCloseSideBar = () => {
@@ -45,6 +47,8 @@ const SmallSidebar = () => {
                         handleCloseSideBar();
                         setEditServiceId(null);
                         setEditBannerId(null);
+                        setEditServiceCategoryId(null);
+                        setEditBlogId(null)
                       }}
                       className={({ isActive }) =>
                         isActive ? activeLink : normalLink
@@ -60,7 +64,7 @@ const SmallSidebar = () => {
               ))}
             </div>
             <div onClick={logout} 
-        className="flex items-center  w-full space-x-2 w-full p-2 text-dark-gray cursor-pointer">
+        className="flex items-center  w-full space-x-2  p-2 text-dark-gray cursor-pointer">
           <BiLogOut className="text-xl"/>
           <p className="font-medium">Logout</p>
         </div>

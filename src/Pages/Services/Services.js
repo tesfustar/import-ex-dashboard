@@ -118,17 +118,17 @@ const Services = () => {
         );
       },
     },
-    // {
-    //   field: "type",
-    //   headerName: "type",
-    //   width: 100,
-    //   renderCell: (params) => {
-    //     console.log(params?.row)
-    //     return (
-    //      <h1>{params?.row?.type}</h1>
-    //     );
-    //   },
-    // },
+    {
+      field: "category",
+      headerName: "category",
+      width: 130,
+      renderCell: (params) => {
+        console.log(params?.row)
+        return (
+         <h1>{params?.row?.category?.title }</h1>
+        );
+      },
+    },
     {
       field: "title",
       headerName: "title",
@@ -141,7 +141,7 @@ const Services = () => {
     {
       field: "body",
       headerName: "body",
-      width: 500,
+      width: 400,
       sortable: false,
       filterable: false,
       headerClassName: "super-app-theme--header",
@@ -194,6 +194,7 @@ const Services = () => {
       />
     );
   }
+  console.log({servicesData})
   return (
     <div className="p-3 md:p-5 ">
       <div className="bg-white p-2 md:p-5 rounded-lg">

@@ -9,3 +9,4 @@ export { default as Login } from "./Login";
 export { default as Category } from "./ServiceCategory/Category";
 
 export { default as CreateCategory } from "./ServiceCategory/CreateCategory";
+export { default as Account } from "./Account/Account";

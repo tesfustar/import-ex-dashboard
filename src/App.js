@@ -10,7 +10,7 @@ import {
 import { Sidebar, SmallSidebar, Navbar } from "./Components";
 import { useAuth } from "./context/auth";
 import { Banner, Services, Dashboard, CreateService,CreateBanner ,
-  Login,Blog,CreateBlog,CreateCategory,Category} from "./Pages";
+  Login,Blog,CreateBlog,CreateCategory,Category, Account} from "./Pages";
 import { AiTwotoneShop, AiFillSetting } from "react-icons/ai";
 const App = () => {
   const [readNotificationId, setReadNotificationId] = useState(null);
@@ -77,6 +77,7 @@ const App = () => {
                 <Route path="/blog/create" element={<CreateBlog />}  />
                 <Route path="/category" element={<Category />}  />
                 <Route path="/category/create" element={<CreateCategory />}  />
+                <Route path="/account" element={<Account />}  />
               </Routes>
             </div>
           </div>

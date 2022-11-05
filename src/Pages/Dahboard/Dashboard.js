@@ -63,7 +63,18 @@ const Dashboard = () => {
             </div>
           </div>
         ) : (
-          <div>Loading</div>
+          <div className="flex items-center justify-center">
+          <ThreeDots
+            height="80"
+            width="80"
+            radius="9"
+            color="#216fed"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            wrapperClassName=""
+            visible={true}
+          />
+        </div>
         )}
       </div>
     </div>

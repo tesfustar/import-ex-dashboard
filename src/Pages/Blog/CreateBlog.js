@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { useHomeContext } from "../../context/HomeContext";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
@@ -9,17 +9,39 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 const CreateBlog = () => {
   const { editBlogId,setEditBlogId } = useHomeContext();
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [file, setFile] = useState(null);
-  const navigate = useNavigate();
   const {token}  =useAuth()
   const headers = {
     "Content-Type": "multipart/form-data",
     Accept: "multipart/form-data",
     Authorization: `Bearer ${token}`,
   };
+  const singleBlogData = useQuery(
+    ["singleBlogDataApis",editBlogId],
+    async () =>
+      await axios.get(`${process.env.REACT_APP_BACKEND_URL}blogs/${editBlogId}`, {
+        headers,
+      }),
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      retry: false,
+      enabled: !!token,
+      onSuccess: (res) => {},
+    }
+  );
+  console.log(singleBlogData?.data?.data)
+  const [title, setTitle] = useState(editBlogId ? singleBlogData?.data?.data?.title : "");
+  const [body, setBody] = useState(editBlogId ? singleBlogData?.data?.data?.body : "");
+  const [file, setFile] = useState(null);
 
+  useEffect(() => {
+    if(editBlogId){
+     setTitle(singleBlogData?.data?.data?.title)
+     setBody(singleBlogData?.data?.data?.body)
+    }
+   }, [editBlogId,singleBlogData.isFetched])
+   
+  const navigate = useNavigate();
   const handleClick = () => {
     if (editBlogId) {
       if(title === "" || body === "" || !file ){
@@ -83,20 +105,7 @@ const CreateBlog = () => {
     }
   );
 
-  //   const servicesData = useQuery(
-  //     ["servicesDataApi",editServiceId],
-  //     async () =>
-  //       await axios.get(`http://simple.hulum.et/api/services/${editServiceId}`, {
-  //         headers,
-  //       }),
-  //     {
-  //       keepPreviousData: true,
-  //       refetchOnWindowFocus: false,
-  //       retry: false,
-  //       enabled: !!editServiceId,
-  //       onSuccess: (res) => {},
-  //     }
-  //   );
+ 
 
   const createBlogHandler = async (values) => {
     console.log(values);
@@ -204,7 +213,7 @@ const CreateBlog = () => {
           </h1>
         </div>
         {/* form */}
-        <div className="pt-3 flex flex-col items-start space-y-2 w-full">
+        {singleBlogData.isFetched ? <div className="pt-3 flex flex-col items-start space-y-2 w-full">
           <div className="flex flex-col items-start space-y-2 w-full">
             <p className="font-medium text-dark-gray">Blog Title</p>
             <input
@@ -255,7 +264,18 @@ const CreateBlog = () => {
               ? "Loading..."
               : "Create"}
           </button>
-        </div>
+        </div> :   <div className="flex items-center justify-center">
+         <ThreeDots
+           height="80"
+           width="80"
+           radius="9"
+           color="#216fed"
+           ariaLabel="three-dots-loading"
+           wrapperStyle={{}}
+           wrapperClassName=""
+           visible={true}
+         />
+       </div>}
       </div>
       <ToastContainer
         position="bottom-center"
