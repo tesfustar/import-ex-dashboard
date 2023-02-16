@@ -17,6 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useHomeContext } from "../../context/HomeContext";
 import { useAuth } from "../../context/auth";
+import parse from "html-react-parser";
 const Blog = () => {
     const {editBlogId,setEditBlogId,} = useHomeContext()
     const {token}  =useAuth()
@@ -129,10 +130,11 @@ const Blog = () => {
           field: "body",
           headerName: "body",
           width: 500,
-          sortable: false,
-          filterable: false,
-          headerClassName: "super-app-theme--header",
-          headerAlign: "left",
+          renderCell: (params) => {
+            return(
+              <p>{parse(params.row.body)}</p>
+            )
+          }
         },
         {
           field: "action",

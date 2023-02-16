@@ -17,10 +17,11 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useHomeContext } from "../../context/HomeContext";
 import { useAuth } from "../../context/auth";
+import parse from "html-react-parser";
 const Services = () => {
-  const {token}  =useAuth()
-  const {editServiceId, setEditServiceId} = useHomeContext()
-  const navigate = useNavigate()
+  const { token } = useAuth();
+  const { editServiceId, setEditServiceId } = useHomeContext();
+  const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [serviceId, setServiceId] = useState(null);
   const headers = {
@@ -36,9 +37,9 @@ const Services = () => {
   };
   const serviceDeleteMutation = useMutation(
     async (id) =>
-      await axios.delete(
-        `${process.env.REACT_APP_BACKEND_URL}services/${id}`,{headers}
-      ),
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}services/${id}`, {
+        headers,
+      }),
     {
       retry: false,
     }
@@ -83,7 +84,7 @@ const Services = () => {
     }
   };
   const servicesData = useQuery(
-    ["servicesDataApi",serviceId,editServiceId],
+    ["servicesDataApi", serviceId, editServiceId],
     async () =>
       await axios.get(`${process.env.REACT_APP_BACKEND_URL}services`, {
         headers,
@@ -108,7 +109,7 @@ const Services = () => {
       headerName: "Image",
       width: 100,
       renderCell: (params) => {
-        console.log(params?.row)
+        console.log(params?.row);
         return (
           <img
             src={params?.row?.service_photo}
@@ -123,10 +124,8 @@ const Services = () => {
       headerName: "category",
       width: 130,
       renderCell: (params) => {
-        console.log(params?.row)
-        return (
-         <h1>{params?.row?.category?.title }</h1>
-        );
+        console.log(params?.row);
+        return <h1>{params?.row?.category?.title}</h1>;
       },
     },
     {
@@ -141,11 +140,10 @@ const Services = () => {
     {
       field: "body",
       headerName: "body",
-      width: 400,
-      sortable: false,
-      filterable: false,
-      headerClassName: "super-app-theme--header",
-      headerAlign: "left",
+      width: 500,
+      renderCell: (params) => {
+        return <p>{parse(params.row.body)}</p>;
+      },
     },
     {
       field: "action",
@@ -166,11 +164,12 @@ const Services = () => {
               Delete
             </button>
             <Link to={"/services/create/"}>
-              <button onClick={()=>setEditServiceId(params.row.id)}
+              <button
+                onClick={() => setEditServiceId(params.row.id)}
                 className="bg-blue-bg rounded-sm text-center
                      px-5 p-1 font-medium text-sm text-white capitalize"
               >
-                  Edit
+                Edit
               </button>
             </Link>
           </div>
@@ -194,7 +193,7 @@ const Services = () => {
       />
     );
   }
-  console.log({servicesData})
+  console.log({ servicesData });
   return (
     <div className="p-3 md:p-5 ">
       <div className="bg-white p-2 md:p-5 rounded-lg">
@@ -202,10 +201,14 @@ const Services = () => {
           <h1 className="text-dark-color dark:text-white font-bold text-2xl">
             Services
           </h1>
-          <button onClick={()=>navigate('/services/create')} 
-          className="bg-blue-bg font-medium text-white p-2 px-5 rounded-md">Create</button>
+          <button
+            onClick={() => navigate("/services/create")}
+            className="bg-blue-bg font-medium text-white p-2 px-5 rounded-md"
+          >
+            Create
+          </button>
         </div>
-      {servicesData.isFetched ? (
+        {servicesData.isFetched ? (
           servicesData?.data?.data?.length > 0 ? (
             services?.length > 0 ? (
               <div style={{ height: 520 }} className="">
@@ -224,16 +227,14 @@ const Services = () => {
                       borderColor: "#64748b",
                       border: "none",
                     },
-                    color:  "#000",
+                    color: "#000",
                     border: 2,
-                    borderColor:  "#64748b",
+                    borderColor: "#64748b",
                     [`& .${gridClasses.cell}`]: {
-                      borderColor: (theme) =>
-                       "#64748b",
+                      borderColor: (theme) => "#64748b",
                     },
                     [`& .${gridClasses.row}`]: {
-                      borderColor: (theme) =>
-                        "#64748b",
+                      borderColor: (theme) => "#64748b",
                       textAlign: "center",
                     },
                     "& .MuiDataGrid-cellCenter": {
@@ -245,7 +246,7 @@ const Services = () => {
                       border: "none",
                     },
                     "& .MuiPaginationItem-root": {
-                      color:  "#64748b",
+                      color: "#64748b",
                       // backgroundColor:'red'
                       border: "none",
                     },
@@ -291,19 +292,19 @@ const Services = () => {
           </div>
         )}
       </div>
-      
+
       <ToastContainer
-          position="bottom-center"
-          autoClose={3000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover={false}
-          transition={Slide}
-        />
+        position="bottom-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        transition={Slide}
+      />
     </div>
   );
 };

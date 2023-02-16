@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
+import ReactQuill from "react-quill";
 const CreateService = () => {
   const { editServiceId, setEditServiceId } = useHomeContext();
   const { token } = useAuth();
@@ -251,14 +252,20 @@ useEffect(() => {
           </div>
           <div className="flex flex-col items-start space-y-2 w-full">
             <p className="font-medium text-dark-gray">Body</p>
-            <textarea
+            {/* <textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
               cols="30"
               rows="5"
               placeholder="description"
               className="p-2 w-full border-2 border-dark-gray text-dark-color focus:outline-none"
-            ></textarea>
+            ></textarea> */}
+            <ReactQuill
+                theme="snow"
+                value={body}
+                onChange={setBody}
+                className=" w-full  text-dark-color focus:outline-none "
+              />
           </div>
           <div className="flex flex-col items-start space-y-2 w-full">
             <p className="font-medium text-dark-gray">Type</p>
